@@ -1,0 +1,24 @@
+spring:
+  cloud:
+    stream:
+      function:
+        definition: EventConsumer
+      bindings:
+        EventConsumer-in-0:
+          destination: events.json
+          content-type: application/json
+          group: spring-stream-concurrency
+          consumer:
+            concurrency: 5
+            max-attempts: 1 # retry disabled
+      kafka:
+        binder:
+          brokers: localhost:9092
+          auto-create-topics: false
+          auto-add-partitions: false
+        bindings:
+          EventConsumer-in-0:
+            consumer:
+              configuration:
+                max.poll.records: 1
+                max.poll.interval.ms: 60000 # 1 minute
